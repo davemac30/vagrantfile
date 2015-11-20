@@ -1,0 +1,48 @@
+---
+# plugin configuration. The following is functionally equivalent to
+# the following Vagrantfile DSL
+# 
+#   config.hostmanager.enabled = true
+#   config.hostmanager.manage_host = true
+#   config.hostmanager.include_offline = false
+#
+:plugins:
+  :hostmanager:
+    :enabled=: true
+    :manage_host=: true
+    :include_offline=: false
+
+# if private_network is defined here, each node will get a /24 private
+# network with the following prefix, starting from .2
+#
+:private_network:
+  :prefix: 192.168.145
+
+# all nodes get these default setting. per-node setting get merged into
+# these. Where settings are defined in defaults and in per-node settings,
+# per-node settings override.
+#
+:defaults:
+  :box: bento/centos-7.1
+  :memory: 512
+  :cpus: 2
+  :synced_folders:
+  - :src: '.'
+    :dst: '/vagrant'
+    :options:
+      :type: nfs
+      :create: true
+#      :mount_options:
+#      - noatime
+#      - ro
+
+# define vms here. default settings can be overridden here
+:vms:
+- :name: node1
+  :box: bento/fedora-22
+  :memory: 1024
+  :forwarded_ports:
+  - :guest: 80
+    :host: 12080
+- :name: node2
+  :memory: 2048
