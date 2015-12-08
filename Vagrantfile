@@ -8,10 +8,11 @@ conf = YAML::load_file(File.join(fdir, 'config.yml'))
 
 Vagrant.configure(2) do |config|
 
-  conf[:plugins].keys.each do |plugin|
-    pconf = conf[:plugins][plugin]
-    pconf.keys.each do |setting|
-      config.send(plugin).send(setting, pconf[setting])
+  conf[:plugins].each do |plugin, pconf|
+    if Vagrant.has_plugin?(pconf[:name])
+      pconf[:settings].each do |setting, value|
+        config.send(plugin).send(setting, value)
+      end
     end
   end unless conf[:plugins].nil?
 
@@ -31,6 +32,7 @@ Vagrant.configure(2) do |config|
     config.vm.define vconf[:name] do |v|
       config.vm.provider "virtualbox" do |v|
         v.customize ["modifyvm", :id, "--natdnspassdomain1", "off"]
+        v.check_guest_additions = false
       end
 
       v.vm.box = vconf[:box]

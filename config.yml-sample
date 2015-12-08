@@ -8,9 +8,11 @@
 #
 :plugins:
   :hostmanager:
-    :enabled=: true
-    :manage_host=: true
-    :include_offline=: false
+    :name: vagrant-hostmanager
+    :settings:
+      :enabled=: true
+      :manage_host=: true
+      :include_offline=: false
 
 # if private_network is defined here, each node will get a /24 private
 # network with the following prefix, starting from .2
